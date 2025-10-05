@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Record Movement - Flask Inventory{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4><i class="bi bi-arrow-left-right"></i> Record Product Movement</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="movement_id" class="form-label">Movement ID</label>
+                        <input type="text" class="form-control" id="movement_id" name="movement_id" 
+                               placeholder="Leave blank to auto-generate">
+                        <div class="form-text">Leave blank to auto-generate a unique ID</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="product_id" class="form-label">Product *</label>
+                        <select class="form-select" id="product_id" name="product_id" required>
+                            <option value="">Select a product</option>
+                            {% for product in products %}
+                            <option value="{{ product.product_id }}">{{ product.name }} ({{ product.product_id }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="qty" class="form-label">Quantity *</label>
+                        <input type="number" class="form-control" id="qty" name="qty" 
+                               min="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="from_location" class="form-label">From Location</label>
+                        <select class="form-select" id="from_location" name="from_location">
+                            <option value="">External (Stock In)</option>
+                            {% for location in locations %}
+                            <option value="{{ location.location_id }}">{{ location.name }} ({{ location.location_id }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Leave empty for stock-in from external source</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="to_location" class="form-label">To Location</label>
+                        <select class="form-select" id="to_location" name="to_location">
+                            <option value="">External (Stock Out)</option>
+                            {% for location in locations %}
+                            <option value="{{ location.location_id }}">{{ location.name }} ({{ location.location_id }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Leave empty for stock-out to external destination</div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Movement Types:</strong><br>
+                        • <strong>Stock In:</strong> From = External, To = Location<br>
+                        • <strong>Stock Out:</strong> From = Location, To = External<br>
+                        • <strong>Transfer:</strong> From = Location A, To = Location B
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('list_movements') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check"></i> Record Movement
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

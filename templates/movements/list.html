@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Movements - Flask Inventory{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-arrow-left-right"></i> Product Movements</h2>
+    <a href="{{ url_for('add_movement') }}" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Record Movement
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Movement ID</th>
+                <th>Timestamp</th>
+                <th>Product</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for move in moves %}
+            <tr>
+                <td><code>{{ move.movement_id }}</code></td>
+                <td>{{ move.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    {% for product in products %}
+                        {% if product.product_id == move.product_id %}
+                            {{ product.name }} <small class="text-muted">({{ product.product_id }})</small>
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if move.from_location %}
+                        {% for location in locations %}
+                            {% if location.location_id == move.from_location %}
+                                {{ location.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-muted">External</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if move.to_location %}
+                        {% for location in locations %}
+                            {% if location.location_id == move.to_location %}
+                                {{ location.name }}
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <span class="text-muted">External</span>
+                    {% endif %}
+                </td>
+                <td><span class="badge bg-primary">{{ move.qty }}</span></td>
+                <td>
+                    <form method="POST" action="{{ url_for('delete_movement', movement_id=move.movement_id) }}" 
+                          class="d-inline" onsubmit="return confirm('Delete this movement?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No movements found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

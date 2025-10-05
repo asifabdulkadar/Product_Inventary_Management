@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Balance Report - Flask Inventory{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-bar-chart"></i> Product Balance Report</h2>
+    <div class="text-muted">
+        <i class="bi bi-info-circle"></i> Shows current inventory levels by product and location
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Product ID</th>
+                <th>Product Name</th>
+                <th>Location ID</th>
+                <th>Location Name</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                <td><code>{{ row.product_id }}</code></td>
+                <td>{{ row.product_name }}</td>
+                <td><code>{{ row.location_id }}</code></td>
+                <td>{{ row.location_name }}</td>
+                <td>
+                    {% if row.balance > 0 %}
+                        <span class="badge bg-success">{{ row.balance }}</span>
+                    {% elif row.balance < 0 %}
+                        <span class="badge bg-danger">{{ row.balance }}</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ row.balance }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">No data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-4">
+    <div class="alert alert-light">
+        <h6><i class="bi bi-lightbulb"></i> How balances are calculated:</h6>
+        <ul class="mb-0">
+            <li><strong>Stock In:</strong> +Quantity (to_location = this location)</li>
+            <li><strong>Stock Out:</strong> -Quantity (from_location = this location)</li>
+            <li><strong>Transfer In:</strong> +Quantity (to_location = this location)</li>
+            <li><strong>Transfer Out:</strong> -Quantity (from_location = this location)</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
