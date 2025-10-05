@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Flask Inventory Management System
 
 **A clean, interview-ready Flask web application for managing products, locations, and inventory movements with real-time balance reporting.**
@@ -236,3 +237,6 @@ flask db upgrade
 ---
 
 **Ready to deploy?** This codebase is production-ready with proper error handling, clean architecture, and comprehensive documentation. Perfect for demonstrating full-stack development skills in technical interviews.
+=======
+# Product_Inventary_Management
+>>>>>>> 4caf3f77660f96703de868bbb4b435eccfc9facf
